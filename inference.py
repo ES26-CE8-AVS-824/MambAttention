@@ -24,6 +24,10 @@ def inference(args, device):
     compress_factor = cfg['model_cfg']['compress_factor']
     sampling_rate = cfg['stft_cfg']['sampling_rate']
 
+    # 2 seconds at the configured sampling rate
+    crop_seconds = 2.0
+    crop_len = int(crop_seconds * sampling_rate)
+
     model = MambAttention(cfg).to(device)
     state_dict = torch.load(args.checkpoint_file, map_location=device)
     model.load_state_dict(state_dict['generator'])
@@ -46,6 +50,10 @@ def inference(args, device):
         for i, fname in enumerate(os.listdir( args.input_folder )):
             #print(fname, args.input_folder)
             noisy_wav, _ = librosa.load(os.path.join( args.input_folder, fname ), sr=sampling_rate)
+
+            # crop to first 2 seconds (or less if the file is shorter)
+            noisy_wav = noisy_wav[:crop_len]
+
             noisy_wav = torch.FloatTensor(noisy_wav).to(device)
 
             norm_factor = torch.sqrt(len(noisy_wav) / torch.sum(noisy_wav ** 2.0)).to(device)
