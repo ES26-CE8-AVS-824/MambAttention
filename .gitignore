@@ -1,1 +1,5 @@
 mambattention_venv/*
+data/*
+*.out
+*.err
+*.whl
