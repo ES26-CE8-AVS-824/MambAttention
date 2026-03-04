@@ -63,7 +63,7 @@ def inference(args, device):
         #     noisy_wav, _ = librosa.load(os.path.join( folder_path, fname ), sr=sampling_rate)
         #     noisy_wav = torch.FloatTensor(noisy_wav).to(device)
         # ---------------------------------------------------- #
-        for i, fname in enumerate(os.listdir(args.input_folder)):
+        for i, fname in enumerate(sorted(f for f in os.listdir(args.input_folder) if f.endswith('.wav'))):
             noisy_wav, _ = librosa.load(os.path.join(args.input_folder, fname), sr=sampling_rate)
 
             total_len = len(noisy_wav)
