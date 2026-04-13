@@ -1,4 +1,5 @@
 mambattention_venv/*
+checkpoints/*
 data/*
 *.out
 *.err
